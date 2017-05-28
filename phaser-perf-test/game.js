@@ -9,8 +9,11 @@
 
     function init() {
         // SET THE NUMBER OF TEXT OBJECTS YOU WANT TO HAVE CREATED INITIALLY
-        // YOU CAN CREATE 50 MORE BY CLICKS / TOUCHES
-        this.number_of_text_objects = 100;
+        // (There are always to text objects on the screen that display information)
+        this.number_of_text_objects = 98;
+		
+        // YOU CAN CREATE MORE BY CLICKING OR TOUCHING THE CANVAS
+		this.number_of_additional_text_objects_on_click = 50;
         
         // ADD STATS
         this.benchmark = new Stats();
@@ -35,7 +38,7 @@
         
         // clear the canvas each frame before rendering the display list.
         // phaser.io/docs/2.6.2/Phaser.Game.html#clearBeforeRender
-        this.game.clearBeforeRender = false;
+        this.game.clearBeforeRender = true;
         
         // ALLOW OR FORBID CANVAS RESIZING AND CENTERING
         // (should not make any difference concerning the performance)
@@ -65,23 +68,23 @@
     function preload() {}
 
     function create() {
-        // The first text object which always exists
+        // The text objects which always exists
         this.textDebug1 = this.game.add.text(100, 0, "Phaser: " + Phaser.VERSION + " | Render: " + this.game.renderType + " | AntiAlias: " + this.game.antialias, { fontSize: 24, fill: "#FF0000" });
-        this.textDebug2 = this.game.add.text(100, 30, "Text no.: " + Math.max(1, this.number_of_text_objects), { fontSize: 24, fill: "#FFFF00" });
+        this.textDebug2 = this.game.add.text(100, 30, "Text count: " + (this.number_of_text_objects + 2), { fontSize: 24, fill: "#FFFF00" });
         // Additional text objects
-        for (var i = 1; i < this.number_of_text_objects; i++) {
+        for (var i = 0; i < this.number_of_text_objects; i++) {
             this.game.add.text(Math.random() * 400, 50 + (Math.random() * 300), "Text object #" + (i + 1), { fontSize: 18, fill: "#FFFFFF" });
         }
         // Create more text by click
         var scope = this;
         this.game.input.onDown.add(function() {                            
             console.log('addText');
-            for (var i = 0; i < 50; i++) {
-                scope.game.add.text(Math.random() * 400, 100 + (Math.random() * 300), "Text object #" + (scope.number_of_text_objects), {fontSize: 18, fill: "#FFFFFF"});
+            for (var i = 0; i < this.number_of_additional_text_objects_on_click; i++) {
+                scope.game.add.text(Math.random() * 400, 100 + (Math.random() * 300), "Text object #" + (scope.number_of_text_objects + 1), {fontSize: 18, fill: "#FFFFFF"});
                 scope.number_of_text_objects += 1;
             }
-            scope.textDebug2.text = "Text no.: " + Math.max(1, this.number_of_text_objects);                            
-        }, this); 
+            scope.textDebug2.text = "Text count: " + (this.number_of_text_objects + 2);
+        }, this);
     }
 
     function update() {
